@@ -128,7 +128,7 @@
         this.$sidebar.displaySidebar(false);
       },
       async logout() {
-      await this.$router.push('/login')
+      await this.$router.push('/asanlogin')
       localStorage.removeItem('user');
 
     }

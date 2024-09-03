@@ -120,7 +120,7 @@
         this.$sidebar.displaySidebar(true)
       },
       async logout() {
-      await this.$router.push('/login')
+      await this.$router.push('/asanlogin')
       localStorage.removeItem('user');
     }
     },

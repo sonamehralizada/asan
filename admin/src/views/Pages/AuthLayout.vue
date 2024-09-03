@@ -38,7 +38,7 @@
                <i class="ni ni-circle-08"></i>
                <span class="nav-link-inner--text">Register</span>
            </b-nav-item>
-           <b-nav-item to="/login">
+           <b-nav-item to="/asanlogin">
                <i class="ni ni-key-25"></i>
                <span class="nav-link-inner--text">Login</span>
            </b-nav-item>

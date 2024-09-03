@@ -22,11 +22,11 @@ router.beforeEach((to, from, next) => {
   // Now fetching user inside the guard
   const user = localStorage.getItem('user'); // Ensure you're using the correct key here
   const isAuthenticated = user !== null;
-  const publicPages = ['/login', '/register']; // public routes that don't require authentication
+  const publicPages = ['/asanlogin', '/register']; // public routes that don't require authentication
   const authRequired = !publicPages.includes(to.path); // check if authentication is needed
   
   if (authRequired && !isAuthenticated) {
-    return next('/login');
+    return next('/asanlogin');
   }
 
   next(); // make sure to always call next()!

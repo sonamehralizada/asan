@@ -82,7 +82,7 @@ export default {
     },
     async onSubmit() {
       try {
-        const response = await axios.post('http://localhost:5000/users/login', {
+        const response = await axios.post('http://localhost:5000/users/asanlogin', {
           email: this.model.email,
           password: this.model.password
         });
