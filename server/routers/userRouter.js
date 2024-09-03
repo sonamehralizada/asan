@@ -28,7 +28,7 @@ router.post('/asanLogin', (req, res) => {
         };
 
         const tokenOptions = {
-            expiresIn: '1m'  // 1 minute
+            expiresIn: '24h'  // 24 hours
         };
 
         const newSpecificToken = jwt.sign(tokenPayload, secretKey, tokenOptions);
