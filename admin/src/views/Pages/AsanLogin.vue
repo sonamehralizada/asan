@@ -1,7 +1,7 @@
 <template>
   <div class="main_container">
     <div class="asan_logo">
-      <img src="@/assets/CDSSO_LOGO.svg" alt="info">
+      <img :src="logo" alt="info">
     </div>
     <b-container class="pb-5">
       <b-row class="justify-content-center">
@@ -12,14 +12,14 @@
                 <div v-for="(header, index) in headers" :key="index" class="panel-buttons">
                   <div class="panel-left">
                     <div class="login_tab_left">
-                        <RouterLink  class="botton-center" v-if="header.pathRout" :to="header.pathRout">
+                        <router-link  class="botton-center" v-if="header.pathRout" :to="{ name: 'fin' }">
                             <img :src="header.path" :alt="header.text">
                             <p class="button-title">{{ header.text }}</p>
-                        </RouterLink>
+                        </router-link >
                     </div>
                     <div class="login_tabs_rigth">
                       <div class="info_icon">
-                        <img src="@/assets/loginTypesInfo.svg" alt="info">
+                        <img :src="loginIcon" alt="info">
                       </div>
                     </div>
                   </div>
@@ -36,13 +36,17 @@
   
 <script>
 import axios from 'axios';
-import { RouterLink } from "vue-router";
 import { mapGetters, mapActions } from "vuex";
 import sima from '@/assets/sima.svg';
 import asanImza from '@/assets/asan-imza.svg';
 import simaToken from '@/assets/sima-token.svg';
 import fin from '@/assets/fin.svg';
 import bsxm from '@/assets/bsxm.svg';
+import loginTypesInfo from '@/assets/loginTypesInfo.svg';
+import logoMain from '@/assets/CDSSO_LOGO.svg';
+
+
+
 
 export default {
   data() {
@@ -60,6 +64,8 @@ export default {
         { text: 'İdentifikasiya nömrəsi ilə', path: fin, id: 4, pathRout: '/fin' },
         { text: 'BSXM Elektron İmza ilə', path: bsxm, id: 5, pathRout: '/fin' }
       ],
+      loginIcon:loginTypesInfo,
+      logo:logoMain
     };
   },
   methods: {

@@ -80,7 +80,6 @@ export default {
         setHomePage: "setHomePage",
         setUser:'setUser',
         logout:'logout'
-
     }),
     async onSubmit() {
       try {

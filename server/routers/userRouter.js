@@ -38,10 +38,11 @@ router.post('/asanLogin', (req, res) => {
             status: 200,
             message: "Login successful",
             token: newSpecificToken,
-            issuedAt: new Date(decodedToken.iat * 1000),
-            expiresAt: new Date(decodedToken.exp * 1000),
+            issuedAt: new Date(decodedToken.iat * 1000).toISOString(),
+            expiresAt: new Date(decodedToken.exp * 1000).toISOString(),
             user: user
         });
+        
     } else {
         res.status(401).json({
             status: 401,

@@ -1,7 +1,7 @@
 <template>
   <div class="main_container">
     <div class="asan_logo">
-      <img src="@/assets/CDSSO_LOGO.svg" alt="info">
+      <img :src="model.logo" alt="info">
     </div>
     <b-container class="pb-5">
       <b-row class="justify-content-center">
@@ -10,7 +10,7 @@
             <div class="row full-height">
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <b-btn class="mb-3" @click="backAsan">
-                  <img src="@/assets/newBack.svg" alt="info">Geri
+                  <img :src="model.back" alt="info">Geri
                 </b-btn>
                 <h3>İdentifikasiya nömrəsi ilə giriş</h3>
                 <validation-observer v-slot="{ handleSubmit }" ref="formValidator">
@@ -48,6 +48,10 @@
 import axios from 'axios';
 import { mapGetters, mapActions } from "vuex";
 import { RouterLink } from "vue-router";
+import logoMain from '@/assets/CDSSO_LOGO.svg';
+import backIcon from '@/assets/newBack.svg';
+
+
 
 export default {
   data() {
@@ -57,6 +61,9 @@ export default {
         password: '',
         rememberMe: false,
         specificToken: '',
+        logo:logoMain,
+        back:backIcon,
+
       },
     };
   },
@@ -96,7 +103,6 @@ export default {
           if (response.data.status === 200) {
             this.specificToken = response.data.token;
             localStorage.setItem('user', JSON.stringify(response.data));
-            // Cookie'ye token ve süresi dolma zamanını kaydedin
             this.setCookie('authToken', response.data.token, new Date(response.data.expiresAt));
             this.setCookie('tokenExpire', response.data.expiresAt, new Date(response.data.expiresAt));
             await this.$router.push('/dashboard');

@@ -1,7 +1,7 @@
 <template>
   <div class="pt-8 pl-2 pr-2 pb-2">
     <b-btn @click="logoutUser">
-      <img src="@/assets/img5.svg" alt="info">
+      <img :src="logout" alt="info">
       </b-btn>
     <h2>Xoş gəlmisiniz</h2>
   </div>
@@ -18,6 +18,7 @@ import BaseProgress from '@/components/BaseProgress';
 import StatsCard from '@/components/Cards/StatsCard';
 import SocialTrafficTable from './Dashboard/SocialTrafficTable';
 import PageVisitsTable from './Dashboard/PageVisitsTable';
+import logoutIcon from '@/assets/img5.svg'
 
 export default {
   components: {
@@ -26,7 +27,7 @@ export default {
     BaseProgress,
     StatsCard,
     PageVisitsTable,
-    SocialTrafficTable
+    SocialTrafficTable,
   },
   data() {
     return {
@@ -35,6 +36,7 @@ export default {
       imageBase64: '',
       images: null,
       newImages:null,
+      logout:logoutIcon,
       texts:'',
       fileData: { logo: '', bgImage: '' },  
       bigLineChart: {
