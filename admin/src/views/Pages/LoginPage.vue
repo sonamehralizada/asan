@@ -104,7 +104,7 @@ export default {
             this.specificToken = response.data.token;
             localStorage.setItem('user', JSON.stringify(response.data));
             this.setCookie('authToken', response.data.token, new Date(response.data.expiresAt));
-            this.setCookie('tokenExpire', response.data.expiresAt, new Date(response.data.expiresAt));
+            this.setCookie('tokenExpire', new Date(response.data.expiresAt), new Date(response.data.expiresAt));
             await this.$router.push('/dashboard');
           } else {
             alert('Login failed!');
