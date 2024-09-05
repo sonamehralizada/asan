@@ -125,12 +125,14 @@ router.post('/asanLogin', (req, res) => {
 
         user.password = null
         res.json({
+            
             status: 200,
             message: "Login successful",
             token: newSpecificToken,
             issuedAt: new Date(decodedToken.iat * 1000).toISOString(),
             expiresAt: new Date(decodedToken.exp * 1000).toISOString(),
-            user: user
+            user: user,
+            redirect: '/'
         });
         
     } else {
@@ -142,9 +144,31 @@ router.post('/asanLogin', (req, res) => {
 });
 
 
-router.post('/logoutAsan', (req, res) => {
-    res.cookie('authToken', '', { expires: new Date(0) });
-    res.json({ message: 'Logged out successfully. Cookie cleared.' });
+const checkTokenExpiration = (expires) => {
+    try {
+        const tokenExpireDate = new Date(expires); 
+        const currentDate = new Date();
+        return tokenExpireDate > currentDate; 
+    } catch (error) {
+        console.error("Error checking token expiration:", error);
+        return false; 
+    }
+};
+
+// POST route to check if the token is expired
+router.post('/check-token', (req, res) => {
+    const { expires , pin} = req.body;
+    const isValid = checkTokenExpiration(expires , pin);
+    res.json({ valid: isValid ,pin: pin  }); 
+});
+
+router.post('/logoutAsan', function(req, res) {
+    const { loggedIn } = req.body;
+    if (!loggedIn) {
+        res.json({ redirect: '/asanlogin' });
+    } else {
+        res.status(200).send('User is still logged in');
+    }
 });
 
 export default router

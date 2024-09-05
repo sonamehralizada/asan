@@ -24,7 +24,8 @@
   import bsxm from '@/assets/bsxm.svg';
   import loginTypesInfo from '@/assets/loginTypesInfo.svg';
   import logoMain from '@/assets/CDSSO_LOGO.svg'
-  import logoutIcon from '@/assets/img5.svg'
+  import logoutIcon from '@/assets/img5.svg';
+  import axios from 'axios'
 
   
   
@@ -41,6 +42,7 @@
         token:null,
         message:null,
         logout:logoutIcon,
+        user:null,
 
         headers: [
           { text: 'SİMA Rəqəmsal İmza ilə', path: sima, id: 1, pathRout: '/fin' },
@@ -54,13 +56,30 @@
       };
     },
     methods: {
-          logoutUser() {
-            this.clearCookie('authToken');
-            this.clearCookie('tokenExpire');
-            this.$router.push('/asanlogin');
+      async logoutUser() {
+          try {
+              const response = await axios.post(`${import.meta.env.VITE_API_KEY}/users/logoutAsan`, {
+                  loggedIn: false
+              });
 
-          console.log('User logged out, cookies cleared.');
-        },
+              if (response.data.redirect) {
+                  this.$router.push(response.data.redirect);
+                  console.log('Redirecting to login page.');
+              } else {
+                  console.log('Logout handled without redirect:', response.data);
+              }
+          } catch (error) {
+              console.error('Error during logout:', error);
+          } finally {
+              // Clear cookies and local storage
+              this.clearCookie('authToken');
+              this.clearCookie('tokenExpire');
+              localStorage.removeItem("user");
+              console.log('User logged out, cookies cleared, and storage cleaned.');
+          }
+      }
+
+      ,
 
         clearCookie(name) {
           document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
@@ -70,35 +89,13 @@
         this.clearCookie('authToken');
         this.$router.push('/asanlogin');
     },
-      authValidation() {
-        try {
-          const expireDate = this.getCookie('tokenExpire');
-          if (expireDate) {
-            const tokenExpireDate = new Date(expireDate);
-            const currentDate = new Date();
-
-            if (tokenExpireDate < currentDate) {
-              this.clearCookie('authToken');
-              this.clearCookie('tokenExpire');
-              this.$router.push('/asanlogin');
-              console.log('Token has expired and cookies cleared.');
-            } else {
-              console.log('Token is still valid until:', tokenExpireDate);
-            }
-          } else {
-            console.log('No expiration information found in cookies.');
-            this.$router.push('/asanlogin');
-        }
-        } catch (error) {
-          console.error('Error in authValidation:', error);
-          this.clearCookie('authToken');
-          this.clearCookie('tokenExpire');
-          this.$router.push('/asanlogin');
-        }
-      },
       getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
+        console.log('value',value)
+        console.log('parts',parts)
+
+
         if (parts.length === 2) {
           return parts.pop().split(';').shift();
         }
@@ -113,10 +110,41 @@
         document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       },
       
+      async validToken() {
+        try {
+            const userStored = localStorage.getItem("user");
+            const userData = JSON.parse(userStored);
+            const pin = userData.user.pin; 
+            if (userStored) {
+                const user = JSON.parse(userStored);
+                console.log(user.expiresAt)
+                console.log('User pin:', pin); 
+
+                const expires = this.getCookie('tokenExpire'); 
+                const response = await axios.post(`${import.meta.env.VITE_API_KEY}/users/check-token`, {
+                  expires: expires,
+                  pin:pin 
+                });
+
+                if (response.data.valid) {
+                    console.log('Token is valid:', response.data);
+                } else {
+                    console.log('Token is not valid');
+                    this.logoutUser();  
+                }
+            } else {
+                console.log('No user data found in local storage.');
+            }
+        } catch (error) {
+            console.error('Error during token validation:', error);
+        }
+      },
+
   
   },
-    mounted() {
-        this.authValidation();
+    async mounted() {
+      this.user = localStorage.getItem("user");
+       await this.validToken();
     },
       
     

@@ -137,7 +137,7 @@ methods: {
       console.log('cliked')
         try {
           const token = this.getCookie('authToken');
-          const response = await axios.post('http://localhost:5000/users/asanLogin', {
+          const response = await axios.post(`${import.meta.env.VITE_API_KEY}/users/asanLogin`, {
             pin: this.pin,
             password: this.password
           }, {
@@ -151,7 +151,7 @@ methods: {
             localStorage.setItem('user', JSON.stringify(response.data));
             this.setCookie('authToken', response.data.token, new Date(response.data.expiresAt));
             this.setCookie('tokenExpire', new Date(response.data.expiresAt), new Date(response.data.expiresAt));
-            await this.$router.push('/');
+            await this.$router.push(response.data.redirect);
           } else {
             alert('Login failed!');
           }
